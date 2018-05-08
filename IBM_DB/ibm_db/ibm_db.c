@@ -251,6 +251,8 @@ static PyTypeObject stmt_handleType = {
 #define STRCASECMP strcasecmp
 #endif
 
+void Py_DebugTrap(void);
+
 static void python_ibm_db_init_globals(struct _ibm_db_globals *ibm_db_globals) {
 	/* env handle */
 	ibm_db_globals->bin_mode = 1;
@@ -1153,7 +1155,9 @@ static PyObject *_python_ibm_db_connect_helper( PyObject *self, PyObject *args, 
 	char server[2048];
 	int isNewBuffer;
 	
-	conn_alive = 1;	
+	conn_alive = 1;
+
+	Py_DebugTrap();
 
 	if (!PyArg_ParseTuple(args, "OOO|OO", &databaseObj, &uidObj, &passwordObj, &options, &literal_replacementObj)){
 		return NULL;
@@ -10016,6 +10020,8 @@ static PyObject *ibm_db_active(PyObject *self, PyObject *args)
 	int rc;
 	conn_handle *conn_res = NULL;
 	SQLINTEGER conn_alive;
+
+	Py_DebugTrap();
 
 	conn_alive = 0;
 
